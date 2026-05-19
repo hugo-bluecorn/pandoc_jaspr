@@ -1,6 +1,20 @@
 /* Spike override for latex.css.
  *
- * latex.css's vertical-rhythm rule `article > * + *` does not fire here
+ * latex.css is designed for full-page LaTeX-style documents where <body>
+ * IS the article. Its body rules (max-width, centering, padding, min-height,
+ * overflow) collapse the DocsLayout's flex chrome. Neutralise the
+ * layout-busting body rules while keeping the inherited typography
+ * (font-family, line-height, hyphens, color, background).
+ */
+body {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  overflow-x: visible;
+}
+
+/* latex.css's vertical-rhythm rule `article > * + *` does not fire here
  * because jaspr_content wraps page content in <section class="content">
  * rather than <article>. Replicate the rule on the wrapper it actually
  * emits. See spike/LATEX_CSS_AUDIT.md §3.1.
