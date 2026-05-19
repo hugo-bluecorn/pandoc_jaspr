@@ -169,22 +169,57 @@ decision in `DEBRIEF.md`:
    `RegExp(r'.*\.pandoc\.json$')`. Inside `parsePage`, decode `page.content`,
    walk blocks/inlines, emit `List<Node>`. Map the MVP nodes per
    `README.md`'s table; log-and-drop the rest.
-5. **Wire a minimal Jaspr `ContentApp` as a throwaway side-app** under
-   `spike/example_app/` — a separate Dart project with its own
-   `pubspec.yaml` that depends on `jaspr`, `jaspr_content`, and
-   `path: ../..` back to `pandoc_jaspr`. Configure the `ContentApp` with
-   `parsers: [PandocParser()]`, `extensions: [TableOfContentsExtension()]`,
-   and a `DocsLayout`. Point the route loader at
-   `spike/article.pandoc.json` (use whatever path resolution
-   `jaspr_content` expects — likely relative to the example_app dir; if
-   that's awkward, copy or symlink the JSON into the example_app's
-   content directory).
+5. **Scaffold a Jaspr docs app** under `spike/example_app/` using
+   `jaspr_cli`'s built-in `docs` template. That template **already wires
+   up `jaspr_content`** — `ContentApp`, layouts, sidebar, a route loader,
+   and likely a default `MarkdownParser`. The spike's job is to bolt
+   `PandocParser` into the parsers list, not to assemble the app from
+   scratch.
 
-   The fastest scaffold is `cd spike && jaspr create example_app`, then
-   edit the generated files to plug in `PandocParser` and the route
-   loader pointing at the article JSON.
+   ```bash
+   cd spike
+   jaspr create \
+     --template docs \
+     --mode static \
+     --routing multi-page \
+     --flutter none \
+     example_app
+   ```
 
-6. **Run it.** From inside `spike/example_app/`:
+   - `--template docs` pulls in `jaspr_content`.
+   - `--mode static` produces statically pre-rendered HTML (matches the
+     eventual GitHub Pages target).
+   - `--routing multi-page` is the jaspr-recommended option and aligns
+     with the longer-term one-route-per-chapter book design. The
+     article is a single page within a multi-page-capable app.
+   - `--flutter none` keeps it pure Dart Jaspr.
+   - `dart pub get` runs automatically (default on).
+
+6. **Wire `pandoc_jaspr` into the scaffold.**
+
+   a. Edit `spike/example_app/pubspec.yaml` to add a path dependency:
+
+      ```yaml
+      dependencies:
+        pandoc_jaspr:
+          path: ../..
+      ```
+
+   b. Run `dart pub get` inside `spike/example_app/`.
+
+   c. Find the app-config file the template produced (likely
+      `lib/main.dart` or `lib/app.dart` — inspect after scaffold). Add
+      `PandocParser()` to the `parsers:` list on `ContentApp`,
+      alongside (or instead of) whatever default parser the template
+      registered. Ensure `TableOfContentsExtension()` is in the
+      `extensions:` list — the template may already have it.
+
+   d. Place `spike/article.pandoc.json` where the route loader will
+      find it. The docs template likely uses a `content/` directory
+      inside the app; if so, copy or symlink the JSON there. If the
+      template uses absolute paths or a different convention, adapt.
+
+7. **Run it.** From inside `spike/example_app/`:
 
    ```bash
    jaspr serve
@@ -192,12 +227,12 @@ decision in `DEBRIEF.md`:
 
    Open the URL `jaspr serve` reports (typically
    `http://localhost:8080`). Read what works and what looks wrong.
-7. **Write tests.** Even without a written TDD process, write enough
+8. **Write tests.** Even without a written TDD process, write enough
    tests to convince yourself the parser maps each MVP node correctly.
    Use small hand-crafted JSON fixtures, not the full article. Note in
    `DEBRIEF.md` how the tests felt to write — that feedback shapes the
    TDD process.
-8. **Write `spike/DEBRIEF.md`.** See the next section for what it must
+9. **Write `spike/DEBRIEF.md`.** See the next section for what it must
    contain.
 
 ## Acceptance criteria
