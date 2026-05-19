@@ -1,0 +1,80 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{fontenc}
+\usepackage{graphicx}
+
+\usepackage[dvips]{hyperref}
+
+\title{A Short Treatise on Lorem Ipsum}
+\author{H. Garcia}
+\date{5/19/26}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+\label{sec:introduction}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+commodo consequat. This document exists to exercise the \emph{pandoc\_jaspr}
+parser end-to-end against a realistic but minimal LaTeX article.
+
+The reader may find further context in the project's \href{https://example.org/pandoc-jaspr}{online documentation}.
+For now, \textbf{three goals} motivate this article:
+
+\begin{itemize}
+  \item Exercise the parser against \texttt{Header}, \texttt{Para}, and \texttt{BulletList} blocks.
+  \item Exercise inline \texttt{Emph}, \texttt{Strong}, and \texttt{Link} nodes.
+  \item Exercise the \texttt{Image} node via \verb|\includegraphics|.
+\end{itemize}
+
+\section{A Slightly Longer Section}
+\label{sec:longer}
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{On Subsections}
+\label{subsec:on-subsections}
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
+veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+
+\subsection{On Ordered Lists}
+\label{subsec:on-ordered-lists}
+
+\begin{enumerate}
+  \item Nemo enim ipsam voluptatem quia voluptas sit aspernatur.
+  \item Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.
+  \item At vero eos et accusamus et iusto odio dignissimos ducimus.
+\end{enumerate}
+
+\section{A Figure}
+\label{sec:figure}
+
+The following figure is referenced from a relative path. The spike
+environment is expected to provide a placeholder \texttt{figures/sample.png};
+if it is absent, the parser should still emit an \texttt{Image} node and the
+rendered page should simply show a broken image icon.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/sample.png}
+  \caption{A placeholder figure used only to exercise the \texttt{Image} code path.}
+  \label{fig:sample}
+\end{figure}
+
+Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam
+nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas
+nulla pariatur.
+
+\end{document}
