@@ -1,8 +1,5 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
+/// Spike public surface for the Pandoc → Jaspr parser.
 library;
 
-export 'src/pandoc_jaspr_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/pandoc_ast.dart';
+export 'src/pandoc_parser.dart';
