@@ -1,5 +1,19 @@
 # Spike — Single-Page LaTeX Article Render
 
+**Status: completed 2026-05-19.** This spike ran to completion. The
+deliverables live on branch `spike/article-render-mvp` (PR #1 against
+`main`, do-not-merge): `DEBRIEF.md` (primary, eight sections),
+`SELF_ASSESSMENT.md`, `LATEX_CSS_AUDIT.md`,
+`LATEX_CSS_CASCADE_AUDIT.md`, `COMPARED_LATEX_JASPR.md`, and
+`FIDELITY_STRATEGY.md`, plus the working `example_app/` and `golden/`
+test snapshots. Two open design questions were surfaced and recorded
+in memory: `project-heading-demotion-open-question` and
+`project-fidelity-strategy-open-question`. **The brief below is
+preserved as the historical record of how the spike was scoped; it is
+no longer an active contract.**
+
+---
+
 > **You are a fresh Claude Code session, picked specifically to run this
 > spike.** Treat this file as your contract. Everything you need is in this
 > repository or linked from it. Stop and ask only if something here is
