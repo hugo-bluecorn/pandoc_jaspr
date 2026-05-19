@@ -106,28 +106,40 @@ repositionable components" feedback.
 
 ## Pre-flight checklist
 
+The repo is already initialized (`git` will work), and the spike inputs
+are pre-generated and committed on `main`:
+
+- `spike/article.tex` — the LaTeX source.
+- `spike/article.pandoc.json` — output of `pandoc -f latex -t json` (~12 KB,
+  `pandoc-api-version` 1.23.1.1). **Use this directly — no need to install
+  pandoc.**
+- `spike/figures/sample.png` — a 100×100 placeholder PNG (83 bytes) so
+  `\includegraphics` resolves cleanly if you ever do re-run pandoc.
+
+What's still on you:
+
 ```bash
 # In /home/hugo/bluecorn/git/pandoc_jaspr/
 
-# 1. Pandoc is required for this spike. Install it if missing.
-which pandoc || sudo apt-get install -y pandoc   # adjust for your distro
-
-# 2. Dart is required. Confirm version.
+# 1. Dart is required. Confirm version.
 dart --version  # expect 3.11.x stable
 
-# 3. Git: init if needed, then make a clean branch for the spike.
-git status >/dev/null 2>&1 || git init
+# 2. Branch off main for the spike. Do NOT work on main.
 git checkout -b spike/article-render-mvp
 
-# 4. Pre-convert the article to JSON.
-mkdir -p spike/figures
-# Drop any 1px PNG at spike/figures/sample.png so \includegraphics resolves.
-# (Optional — the parser must handle the case where the file is missing too.)
-pandoc -f latex -t json spike/article.tex -o spike/article.pandoc.json
-
-# 5. Eyeball the JSON to confirm shape before writing Dart.
-head -c 2000 spike/article.pandoc.json | python3 -m json.tool | head -40
+# 3. Eyeball the JSON to confirm shape before writing Dart.
+python3 -m json.tool spike/article.pandoc.json | head -60
 ```
+
+Optional — regenerate the JSON if you edit `article.tex`:
+
+```bash
+pandoc -f latex -t json spike/article.tex -o spike/article.pandoc.json
+```
+
+If pandoc is missing on your host: `sudo apt-get install -y pandoc`
+(or the equivalent for your distro). It is **not** required for the
+spike itself.
 
 ## Starter sequence
 
