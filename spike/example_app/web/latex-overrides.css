@@ -1,0 +1,10 @@
+/* Spike override for latex.css.
+ *
+ * latex.css's vertical-rhythm rule `article > * + *` does not fire here
+ * because jaspr_content wraps page content in <section class="content">
+ * rather than <article>. Replicate the rule on the wrapper it actually
+ * emits. See spike/LATEX_CSS_AUDIT.md §3.1.
+ */
+section.content > * + * {
+  margin-top: 1em;
+}

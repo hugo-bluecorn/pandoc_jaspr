@@ -28,52 +28,56 @@ class PandocParser implements PageParser {
 }
 
 List<Node> _blocks(List<Block> blocks) {
-  final out = <Node>[];
-  for (final b in blocks) {
-    final node = _block(b);
-    if (node != null) out.add(node);
-  }
-  return out;
+  return [for (final b in blocks) ..._block(b)];
 }
 
-Node? _block(Block block) {
+// Plain emits bare children (per README mapping table); Unsupported emits
+// nothing after logging; everything else emits a single ElementNode.
+Iterable<Node> _block(Block block) {
   return switch (block) {
     // Spike-only: demote one level (h1→h2, h2→h3, …) so that
     // jaspr_content's TableOfContentsExtension (which skips h1) picks up
     // top-level Pandoc headers. See DEBRIEF.md for the tension this exposes.
-    Header(:final level, :final attr, :final inlines) => ElementNode(
-      'h${(level + 1).clamp(1, 6)}',
-      _attrToAttrs(attr),
-      _inlines(inlines),
-    ),
-    Para(:final inlines) => ElementNode('p', const {}, _inlines(inlines)),
-    Plain(:final inlines) => ElementNode('span', const {}, _inlines(inlines)),
-    BulletList(:final items) => ElementNode(
-      'ul',
-      const {},
-      items.map(_listItem).toList(growable: false),
-    ),
-    OrderedList(:final startNumber, :final items) => ElementNode(
-      'ol',
-      startNumber == 1 ? const {} : {'start': '$startNumber'},
-      items.map(_listItem).toList(growable: false),
-    ),
-    Figure(:final attr, :final caption, :final content) => ElementNode(
-      'figure',
-      _attrToAttrs(attr),
-      [
+    Header(:final level, :final attr, :final inlines) => [
+      ElementNode(
+        'h${(level + 1).clamp(1, 6)}',
+        _attrToAttrs(attr),
+        _inlines(inlines),
+      ),
+    ],
+    Para(:final inlines) => [ElementNode('p', const {}, _inlines(inlines))],
+    Plain(:final inlines) => _inlines(inlines),
+    BulletList(:final items) => [
+      ElementNode(
+        'ul',
+        const {},
+        items.map(_listItem).toList(growable: false),
+      ),
+    ],
+    OrderedList(:final startNumber, :final items) => [
+      ElementNode(
+        'ol',
+        startNumber == 1 ? const {} : {'start': '$startNumber'},
+        items.map(_listItem).toList(growable: false),
+      ),
+    ],
+    Figure(:final attr, :final caption, :final content) => [
+      ElementNode('figure', _attrToAttrs(attr), [
         ..._blocks(content),
         if (caption.isNotEmpty)
           ElementNode('figcaption', const {}, _blocks(caption)),
-      ],
-    ),
-    Div(:final attr, :final content) => ElementNode(
-      'div',
-      _attrToAttrs(attr),
-      _blocks(content),
-    ),
-    UnsupportedBlock(:final tag) => _dropUnsupported('block', tag),
+      ]),
+    ],
+    Div(:final attr, :final content) => [
+      ElementNode('div', _attrToAttrs(attr), _blocks(content)),
+    ],
+    UnsupportedBlock(:final tag) => _dropUnsupportedBlock(tag),
   };
+}
+
+Iterable<Node> _dropUnsupportedBlock(String tag) {
+  _dropUnsupported('block', tag);
+  return const [];
 }
 
 Node _listItem(List<Block> blocks) {

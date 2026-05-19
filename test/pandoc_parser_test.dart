@@ -206,11 +206,26 @@ void main() {
       final fig = nodes.single as ElementNode;
       expect(fig.tag, 'figure');
       expect(fig.attributes['id'], 'fig:demo');
-      // figure has Plain wrapping the Image, then figcaption.
+      // Plain emits its children bare — no <span> wrapper. So the figure's
+      // content is the <img> directly followed by <figcaption>.
       final inner = fig.children!;
       expect(inner, hasLength(2));
-      final cap = inner.last as ElementNode;
-      expect(cap.tag, 'figcaption');
+      expect((inner.first as ElementNode).tag, 'img');
+      expect((inner.last as ElementNode).tag, 'figcaption');
+    });
+
+    test('Plain at top level emits bare children, no <span>', () {
+      final nodes = parse([
+        {
+          't': 'Plain',
+          'c': [str('Hello'), space(), str('world')],
+        },
+      ]);
+
+      expect(nodes, hasLength(3));
+      expect((nodes[0] as TextNode).text, 'Hello');
+      expect((nodes[1] as TextNode).text, ' ');
+      expect((nodes[2] as TextNode).text, 'world');
     });
 
     test('Div passes attrs through', () {

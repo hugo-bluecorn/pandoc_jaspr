@@ -5,6 +5,7 @@
 library;
 
 // Server-specific Jaspr import.
+import 'package:jaspr/dom.dart' show link;
 import 'package:jaspr/server.dart';
 
 import 'package:jaspr_content/components/callout.dart';
@@ -23,6 +24,19 @@ import 'components/clicker.dart';
 
 // This file is generated automatically by Jaspr, do not remove or edit.
 import 'main.server.options.dart';
+
+/// DocsLayout variant that adds latex.css + the spike's override stylesheet
+/// to the document head. See spike/LATEX_CSS_AUDIT.md for why.
+class LatexDocsLayout extends DocsLayout {
+  const LatexDocsLayout({super.header, super.sidebar, super.footer});
+
+  @override
+  Iterable<Component> buildHead(Page page) sync* {
+    yield* super.buildHead(page);
+    yield link(rel: 'stylesheet', href: '/latex.css');
+    yield link(rel: 'stylesheet', href: '/latex-overrides.css');
+  }
+}
 
 void main() {
   // Initializes the server environment with the generated default options.
@@ -62,8 +76,8 @@ void main() {
         Image(zoom: true),
       ],
       layouts: [
-        // Out-of-the-box layout for documentation sites.
-        DocsLayout(
+        // LatexDocsLayout = DocsLayout + latex.css <link>s in the head.
+        LatexDocsLayout(
           header: Header(
             title: 'My Docs',
             logo: '/images/logo.svg',
