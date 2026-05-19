@@ -119,7 +119,7 @@ The package does **not**:
 
 ## Dart language and ecosystem target
 
-- SDK: target the latest released stable Dart. As of 2026-05-19 that's **3.11.x** (3.11.6 was released 2026-05-05). 3.12 and 3.13 exist in the SDK changelog but are still marked "Unreleased."
+- SDK: target the latest released stable Dart. As of 2026-05-19 that's **3.12.0** (released 2026-05-08; the locally installed `dart` reports this). The `dart-lang/sdk` checkout under `/home/hugo/ai/context/github/` was taken before that release and still annotates 3.12.0 as "Unreleased" in its CHANGELOG — that snapshot is stale. The current `pubspec.yaml` constraint `sdk: ^3.11.5` (meaning `>=3.11.5 <4.0.0`) accepts 3.12 without change.
 - Lints: keep `lints: ^6.0.0` (the current pin).
 - Sealed classes + exhaustive switch expressions are the right tool for the Block/Inline model — both have been stable since Dart 3.0.
 

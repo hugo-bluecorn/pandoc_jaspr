@@ -44,7 +44,7 @@ This is still a `dart create`-style scaffold:
 - `pubspec.yaml` has no dependencies. The real implementation will need `jaspr` and `jaspr_content`.
 - `test/pandoc_jaspr_test.dart` only tests the placeholder.
 - `lints: ^6.0.0` is the right modern pin — keep it.
-- `sdk: ^3.11.5` is fine; latest released stable as of 2026-05-19 is 3.11.6. Do not target 3.12 or 3.13 — both are still unreleased per the SDK CHANGELOG.
+- `sdk: ^3.11.5` is fine — the caret constraint accepts 3.12. The locally installed `dart` reports **3.12.0 stable** (released 2026-05-08); the cloned `dart-lang/sdk` checkout's CHANGELOG.md still marks it "Unreleased" because the snapshot predates the release. Trust the installed binary, not the stale checkout.
 
 ## Commands
 
