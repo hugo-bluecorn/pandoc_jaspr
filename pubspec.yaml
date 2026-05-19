@@ -1,7 +1,8 @@
 name: pandoc_jaspr
-description: A starting point for Dart libraries or applications.
+description: Converts Pandoc JSON AST into Jaspr Component trees for LaTeX-driven Jaspr sites.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/hugo-bluecorn/pandoc_jaspr
+issue_tracker: https://github.com/hugo-bluecorn/pandoc_jaspr/issues
 
 environment:
   sdk: ^3.11.5
